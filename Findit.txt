@@ -1,0 +1,110 @@
+FinditApplication: JApplet
+Findit: Model (Observable)
+	FinditObserver: implements (Observer)
+ImageSpace: View(JComponent)
+	ImageSpaceListener: extends (MouseListener)
+Timebar: View (JComponent)
+	TimebarThread: Thread
+	ChangeHandler: Runnable
+ImageSpaceAuxiliaries (url)
+FinditPanel: (JPanel)
+	ExitButton: JButton
+	NextButton: JButton
+	PlayButton: JButton
+FinditPanelListener: (ActionListener)
+
+FinditInterface
+ImageSpaceInterface
+TimebarInterface
+FinditPanelInterface
+
+Findit: 
+	level(int)
+	foundfault(int)
+	maxfault(int)
+	win(boolean)
+	gamewon(boolean)
+	gamelose(boolean)
+	gameover(boolean)
+	timeleft(double)
+	// setters(update, notifyObserver)
+	// getters
+FinditObserver: 
+	fa(FinditApplication)
+	setViews...
+
+ImageSpace:
+	leftimage(Image)
+	rightimage(Image)
+	imagewidth(int)
+	imageheight(int)
+	level(int)
+	faultXpos(double[]) (a proportion)
+	faultYpos(double[]) (a proportion)
+	range(double)
+	found(boolean[])
+	winimage(Image)
+	loseimage(Image)
+	winallimage(Image)
+	timeleft(double)
+	timeup(boolean)
+	founddiiff(int)	
+	// paint()
+ImageSpaceListener: 
+	fa(FinditApplication)
+	setModel...	
+
+Timebar:
+	fa(FinditApplication)
+	thread(TimebarThread)
+	timeleft(double)
+	timeup(boolean)
+	level(int)
+	speed(int)
+	// paint()
+	// TimebarListener: setModel...	
+
+FinditPanel:
+	fa(FinditApplication)
+	ExitButton
+	NextButton
+	PlayButton
+	GridLayout
+	gamewon(boolean)
+	gamelose(boolean)
+	gameover(boolean)
+	// firePropertyChange
+LocalActionListener
+FinditPanelListener (PropertyChangeListener)
+
+Some crucial state variables:
+level, gamewon, gamelose, gameover, gamewinall, timeup
+foundfault, maxfault
+(click buttonPlay)
+(click buttonNext)
+(click buttonExit)
+
+paint: (ImageSpace)
+	if level=0: load welcomeimage
+	else if level!=0: if gamewinall=true: load gamewinallimage
+		  	  else if gameover=true: load gameoverimage
+		  	  else if gamewon=true: load gamewonimage
+		  	  else if gamelose=true: load gameloseimage
+		  	  else (gamewinall=false, gameover=false, gamewon=false, gamelose=false)
+				if level=i: load leftimage(i) and rightimage(i)
+					    founds(j): drawrect at (faultXpos(j),faultYpos(j))
+	
+How to update the model (Findit)
+	gamewon: if timeup!=true and foundfault=maxfault
+	gamelose: if timeup=true adn foundfault<maxfault
+	gamewinall: if level=toplevel(5) and gamewon
+	gameover: 
+	foundfault update
+
+Listener to FinditPanel 
+	buttonPlayclicked: gamewinall=false, gameover=false, gamewon=false, gamelose=false, construct new timebar
+	buttonNextclicked: if level!=toplevel(5): gamewinall=false, gameover=false, gamewon=false, gamelose=false, level++, construct new timebar
+			   else
+	buttonExitClicked: exit(0)
+
+
